@@ -1,0 +1,50 @@
+CREATE TABLE park (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    address TEXT NOT NULL,
+    district TEXT NOT NULL,
+    neighbourhood TEXT NOT NULL,
+    area REAL,
+    water REAL,
+    land REAL,
+    latitude REAL,
+    longitude REAL
+);
+
+CREATE TABLE asset (
+    id INTEGER PRIMARY KEY,
+    typeId INTEGER NOT NULL,
+    parkId INTEGER NOT NULL,
+    subtype TEXT,
+    size TEXT,
+    latitude REAL,
+    longitude REAL
+);
+
+CREATE TABLE assetType (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL
+);
+
+selectParksCount:
+SELECT COUNT (*) FROM park;
+
+insertParkObject:
+INSERT OR REPLACE INTO park(id, title, address, district, neighbourhood, area, water, land, latitude, longitude)
+VALUES ?;
+
+insertAssetObject:
+INSERT OR REPLACE INTO asset(id, parkId, typeId, subtype, size, latitude, longitude)
+VALUES ?;
+
+insertAssetTypeObject:
+INSERT OR REPLACE INTO assetType(id, title)
+VALUES ?;
+
+selectParkById:
+SELECT * FROM park WHERE id = ?;
+
+
+
+
+

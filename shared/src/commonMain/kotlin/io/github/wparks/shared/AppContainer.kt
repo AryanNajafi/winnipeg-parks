@@ -1,16 +1,19 @@
 package io.github.wparks.shared
 
-import io.github.wparks.shared.data.ParkApi
+import com.russhwolf.settings.Settings
 import io.github.wparks.shared.data.ParkRepository
+import io.github.wparks.shared.data.db.DbContainer
+import io.github.wparks.shared.data.remote.ParkApi
 import io.ktor.client.*
-import io.ktor.client.features.json.*
+import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.*
+import kotlinx.serialization.json.Json
 
-class AppContainer {
+class AppContainer(dbContainer: DbContainer) {
 
     private val httpClient = HttpClient {
         install(JsonFeature) {
-            serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+            serializer = KotlinxSerializer(Json {
                 ignoreUnknownKeys = true
             })
         }
@@ -18,5 +21,7 @@ class AppContainer {
 
     private val parkApi = ParkApi(httpClient)
 
-    val repository = ParkRepository(parkApi)
+    private val settings = Settings()
+
+    val repository = ParkRepository(parkApi, dbContainer.database.parkQueries, settings)
 }
