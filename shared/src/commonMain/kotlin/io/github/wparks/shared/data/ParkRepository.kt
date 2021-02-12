@@ -1,11 +1,14 @@
 package io.github.wparks.shared.data
 
 import com.russhwolf.settings.Settings
-import io.github.wparks.shared.Park
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
 import io.github.wparks.shared.Asset
 import io.github.wparks.shared.AssetType
+import io.github.wparks.shared.Park
 import io.github.wparks.shared.ParkQueries
 import io.github.wparks.shared.data.remote.ParkApi
+import kotlinx.coroutines.flow.Flow
 
 class ParkRepository(private val api: ParkApi,
                      private val parkQueries: ParkQueries,
@@ -34,6 +37,10 @@ class ParkRepository(private val api: ParkApi,
         return parkQueries.selectParkById(id).executeAsOne()
     }
 
+    fun loadParks(page: Long): Flow<List<Park>> {
+        return parkQueries.selectParks(PAGE_SIZE, page * PAGE_SIZE).asFlow().mapToList()
+    }
+
     private suspend fun shouldUpdateParksCache(): Boolean {
         val parksCount = parkQueries.selectParksCount().executeAsOne()
         val cacheVersion = settings.getInt(SETTINGS_KEY_CACHE_VERSION, 0)
@@ -44,11 +51,12 @@ class ParkRepository(private val api: ParkApi,
         return dbVersion.latestVersion > cacheVersion
     }
 
-    suspend fun tryUpdateRecentParksCache() {
+    suspend fun tryUpdateParksCache() {
         if (shouldUpdateParksCache()) fetchParksInfo()
     }
 
     companion object {
         private const val SETTINGS_KEY_CACHE_VERSION = "cache_version"
+        private const val PAGE_SIZE = 20L
     }
 }

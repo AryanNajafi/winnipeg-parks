@@ -1,13 +1,23 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("kotlin-android")
 }
+
+val composeVersion = "1.0.0-alpha12"
+val lifecycleVersion = "2.2.0"
 
 dependencies {
     implementation(project(":shared"))
-    implementation("com.google.android.material:material:1.2.1")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha02")
     implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.compose.ui:ui:$composeVersion")
+    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    implementation("androidx.compose.foundation:foundation:$composeVersion")
+    implementation("androidx.compose.material:material:$composeVersion")
 }
 
 android {
@@ -19,6 +29,26 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        useIR = true
+    }
+
+    composeOptions {
+        kotlinCompilerVersion = "1.4.30"
+        kotlinCompilerExtensionVersion = composeVersion
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false

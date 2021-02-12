@@ -13,6 +13,23 @@ sqldelight {
     }
 }
 
+android {
+    compileSdkVersion(30)
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    defaultConfig {
+        minSdkVersion(24)
+        targetSdkVersion(30)
+    }
+    configurations {
+        create("androidTestApi")
+        create("androidTestDebugApi")
+        create("androidTestReleaseApi")
+        create("testApi")
+        create("testDebugApi")
+        create("testReleaseApi")
+    }
+}
+
 kotlin {
     android()
     ios {
@@ -33,10 +50,12 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
                 implementation("io.ktor:ktor-client-core:1.4.2")
                 implementation("io.ktor:ktor-client-json:1.4.2")
                 implementation("io.ktor:ktor-client-serialization:1.4.2")
+                implementation("com.squareup.sqldelight:runtime:1.4.4")
+                implementation("com.squareup.sqldelight:coroutines-extensions:1.4.3")
                 implementation("com.russhwolf:multiplatform-settings-no-arg:0.7")
             }
         }
@@ -49,7 +68,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
                 implementation("io.ktor:ktor-client-json-jvm:1.4.3")
                 implementation("io.ktor:ktor-client-okhttp:1.4.3")
                 implementation("com.squareup.sqldelight:android-driver:1.4.4")
@@ -63,19 +82,11 @@ kotlin {
         }
         val iosMain by getting {
             dependencies {
+                implementation("io.ktor:ktor-client-ios:1.4.3")
                 implementation("com.squareup.sqldelight:native-driver:1.4.4")
             }
         }
         val iosTest by getting
-    }
-}
-
-android {
-    compileSdkVersion(30)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(30)
     }
 }
 

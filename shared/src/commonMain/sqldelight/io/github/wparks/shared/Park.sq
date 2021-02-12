@@ -44,6 +44,9 @@ VALUES ?;
 selectParkById:
 SELECT * FROM park WHERE id = ?;
 
+selectParks:
+SELECT * FROM park LIMIT :limit OFFSET :offset;
+
 
 
 
