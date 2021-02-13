@@ -5,7 +5,7 @@ import io.github.wparks.androidApp.ui.theme.AppTheme
 
 @Composable
 fun MyApp(content: @Composable () -> Unit) {
-    AppTheme {
+    AppTheme(darkTheme = false) {
         content()
     }
 }

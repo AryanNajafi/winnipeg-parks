@@ -3,18 +3,22 @@ package io.github.wparks.androidApp.ui.home
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import io.github.wparks.androidApp.MyApplication
 import io.github.wparks.androidApp.ui.MyApp
+import io.github.wparks.shared.data.Park
 
 class HomeActivity : AppCompatActivity() {
 
@@ -47,12 +51,12 @@ fun Parks(viewModel: HomeViewModel) {
     val lastIndex = viewState.value.parks.lastIndex
 
     Surface(Modifier.fillMaxSize()) {
-        LazyColumn {
+        LazyColumn(Modifier.background(color = Color(0xFFF3F3F3))) {
             itemsIndexed(viewState.value.parks) { index, park ->
                 if (index == lastIndex) {
                     viewModel.loadMoreParks()
                 }
-                Text(text = park.title)
+                ParkCard(park = park)
             }
         }
     }
