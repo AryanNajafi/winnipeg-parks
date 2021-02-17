@@ -13,6 +13,7 @@ CREATE TABLE park (
 
 CREATE TABLE asset (
     id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
     typeId INTEGER NOT NULL,
     parkId INTEGER NOT NULL,
     subtype TEXT,
@@ -34,7 +35,7 @@ INSERT OR REPLACE INTO park(id, title, address, district, neighbourhood, area, w
 VALUES ?;
 
 insertAssetObject:
-INSERT OR REPLACE INTO asset(id, parkId, typeId, subtype, size, latitude, longitude)
+INSERT OR REPLACE INTO asset(id, title, parkId, typeId, subtype, size, latitude, longitude)
 VALUES ?;
 
 insertAssetTypeObject:
@@ -46,6 +47,9 @@ SELECT * FROM park WHERE id = ?;
 
 selectParks:
 SELECT * FROM park LIMIT :limit OFFSET :offset;
+
+selectParkAssets:
+SELECT * FROM asset WHERE parkId = ?;
 
 
 

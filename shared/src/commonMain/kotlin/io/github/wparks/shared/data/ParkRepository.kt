@@ -4,7 +4,6 @@ import com.russhwolf.settings.Settings
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import io.github.wparks.shared.Asset
-import io.github.wparks.shared.AssetType
 import io.github.wparks.shared.Park
 import io.github.wparks.shared.ParkQueries
 import io.github.wparks.shared.data.remote.ParkApi
@@ -22,19 +21,20 @@ class ParkRepository(private val api: ParkApi,
         }.forEach { parkQueries.insertParkObject(it) }
 
         parksInfo.assets.map { asset ->
-            Asset(asset.id.toLong(), asset.parkId.toLong(), asset.typeId.toLong(), asset.subtype,
-                asset.size, asset.latitude, asset.longitude)
+            val title = parksInfo.assetTypes.first { it.id == asset.typeId }.title
+            Asset(asset.id.toLong(), title, asset.typeId.toLong(), asset.parkId.toLong(),
+                asset.subtype, asset.size, asset.latitude, asset.longitude)
         }.forEach { parkQueries.insertAssetObject(it) }
-
-        parksInfo.assetTypes
-            .map { type ->  AssetType(type.id.toLong(), type.title)}
-            .forEach { parkQueries.insertAssetTypeObject(it) }
 
         settings.putInt(SETTINGS_KEY_CACHE_VERSION, parksInfo.version)
     }
 
-    fun getParkInfo(id: Long): Park {
+    fun loadParkInfo(id: Long): Park {
         return parkQueries.selectParkById(id).executeAsOne()
+    }
+
+    fun loadParkAssets(parkId: Long): Flow<List<Asset>> {
+        return parkQueries.selectParkAssets(parkId).asFlow().mapToList()
     }
 
     fun loadParks(page: Long): Flow<List<Park>> {
