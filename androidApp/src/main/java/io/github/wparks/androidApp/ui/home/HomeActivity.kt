@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.github.wparks.androidApp.MyApplication
 import io.github.wparks.androidApp.ui.MyApp
 import io.github.wparks.androidApp.ui.park.ParkActivity
+import io.github.wparks.shared.Park
 
 class HomeActivity : AppCompatActivity() {
 
@@ -31,7 +32,8 @@ class HomeActivity : AppCompatActivity() {
             MyApp {
                 Parks(viewModel = viewModel, onItemClick = {
                     val parkIntent = Intent(this, ParkActivity::class.java)
-                    parkIntent.putExtra(INTENT_KEY_PARK_ID, it)
+                    parkIntent.putExtra(INTENT_KEY_PARK_ID, it.id)
+                    parkIntent.putExtra(INTENT_KEY_PARK_TITLE, it.title)
                     startActivity(parkIntent)
                 })
             }
@@ -47,13 +49,14 @@ class HomeActivity : AppCompatActivity() {
     }
 
     companion object {
-        public const val INTENT_KEY_PARK_ID = "park_id"
+        const val INTENT_KEY_PARK_ID = "park_id"
+        const val INTENT_KEY_PARK_TITLE = "park_title"
     }
 }
 
 @Composable
 fun Parks(viewModel: HomeViewModel,
-          onItemClick: (Long) -> Unit) {
+          onItemClick: (Park) -> Unit) {
 
     val viewState = viewModel.uiState.collectAsState()
     val lastIndex = viewState.value.parks.lastIndex

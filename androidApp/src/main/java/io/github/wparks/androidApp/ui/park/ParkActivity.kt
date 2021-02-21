@@ -1,10 +1,11 @@
 package io.github.wparks.androidApp.ui.park
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import io.github.wparks.androidApp.MyApplication
 import io.github.wparks.androidApp.ui.MyApp
@@ -32,7 +34,15 @@ class ParkActivity : AppCompatActivity() {
                 ParkInfo(viewModel)
             }
         }
+
         val parkId = intent.getLongExtra(HomeActivity.INTENT_KEY_PARK_ID, -1)
+        val parkTitle = intent.getStringExtra(HomeActivity.INTENT_KEY_PARK_TITLE)
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+            setTitle(parkTitle)
+        }
 
         val appContainer = (application as MyApplication).appContainer
 
@@ -42,6 +52,14 @@ class ParkActivity : AppCompatActivity() {
         viewModel.loadParkInfo(parkId)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }
 
 @Composable
@@ -49,12 +67,23 @@ fun ParkInfo(viewModel: ParkViewModel) {
 
     val viewState = viewModel.uiState.collectAsState()
 
-    Surface(Modifier.fillMaxSize()) {
-        LazyColumn(Modifier.background(color = Color(0xFFF3F3F3))) {
-            itemsIndexed(viewState.value.assets) { index, asset ->
-                Text(text = asset.title, style = MaterialTheme.typography.body2)
+    val typography = MaterialTheme.typography
+    
+    Surface(Modifier.fillMaxSize()
+        .background(color = MaterialTheme.colors.surface)) {
+        Column {
+            Text(text = "Amenities", style = typography.h6)
+            Spacer(modifier = Modifier.preferredHeight(10.dp))
+            LazyColumn {
+                itemsIndexed(viewState.value.assets.distinctBy {
+                    AssetSelector(it.typeId, it.subtype, it.size) }) { index, asset ->
+                    AssetCard(asset = asset)
+                }
             }
         }
+
     }
 
 }
+
+data class AssetSelector(val typeId: Long, val subType: String?, val size: String?)

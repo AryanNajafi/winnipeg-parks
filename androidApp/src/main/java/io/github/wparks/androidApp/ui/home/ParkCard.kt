@@ -17,7 +17,7 @@ import io.github.wparks.shared.Park
 
 @Composable
 fun ParkCard(park: Park,
-             onItemClick: (Long) -> Unit,
+             onItemClick: (Park) -> Unit,
              modifier: Modifier = Modifier) {
     Card(modifier = modifier
             .fillMaxWidth()
@@ -25,7 +25,7 @@ fun ParkCard(park: Park,
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colors.surface)
             .clickable {
-                onItemClick(park.id)
+                onItemClick(park)
             },
     ) {
         Column(modifier = Modifier.padding(16.dp, 10.dp)) {
