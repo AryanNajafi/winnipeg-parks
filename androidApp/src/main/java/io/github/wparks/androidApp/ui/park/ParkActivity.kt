@@ -5,7 +5,10 @@ import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
@@ -14,7 +17,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import io.github.wparks.androidApp.MyApplication
@@ -73,7 +75,7 @@ fun ParkInfo(viewModel: ParkViewModel) {
         .background(color = MaterialTheme.colors.surface)) {
         Column {
             Text(text = "Amenities", style = typography.h6)
-            Spacer(modifier = Modifier.preferredHeight(10.dp))
+            Spacer(modifier = Modifier.requiredHeight(10.dp))
             LazyColumn {
                 itemsIndexed(viewState.value.assets.distinctBy {
                     AssetSelector(it.typeId, it.subtype, it.size) }) { index, asset ->

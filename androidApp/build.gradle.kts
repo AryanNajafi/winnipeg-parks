@@ -4,12 +4,12 @@ plugins {
     id("kotlin-android")
 }
 
-val composeVersion = "1.0.0-alpha12"
+val composeVersion = "1.0.0-beta03"
 val lifecycleVersion = "2.2.0"
 
 dependencies {
     implementation(project(":shared"))
-    implementation("androidx.activity:activity-compose:1.3.0-alpha02")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha05")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
@@ -45,7 +45,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = "1.4.30"
+        kotlinCompilerVersion = "1.4.31"
         kotlinCompilerExtensionVersion = composeVersion
     }
 
