@@ -5,10 +5,7 @@ import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
@@ -43,7 +40,7 @@ class ParkActivity : AppCompatActivity() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeButtonEnabled(true)
-            setTitle(parkTitle)
+            title = parkTitle
         }
 
         val appContainer = (application as MyApplication).appContainer
@@ -71,14 +68,19 @@ fun ParkInfo(viewModel: ParkViewModel) {
 
     val typography = MaterialTheme.typography
     
-    Surface(Modifier.fillMaxSize()
-        .background(color = MaterialTheme.colors.surface)) {
-        Column {
+    Surface(modifier = Modifier
+        .fillMaxSize()
+        .background(color = MaterialTheme.colors.surface)
+    ) {
+        Column(Modifier.padding(10.dp) ) {
             Text(text = "Amenities", style = typography.h6)
             Spacer(modifier = Modifier.requiredHeight(10.dp))
             LazyColumn {
-                itemsIndexed(viewState.value.assets.distinctBy {
-                    AssetSelector(it.typeId, it.subtype, it.size) }) { index, asset ->
+                itemsIndexed(
+                    viewState.value.assets.distinctBy {
+                        AssetSelector(it.typeId, it.subtype, it.size)
+                    }
+                ) { index, asset ->
                     AssetCard(asset = asset)
                 }
             }
