@@ -1,8 +1,8 @@
 package io.github.wparks.androidApp.ui.park
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.wparks.shared.Asset
 import io.github.wparks.shared.Park
 import io.github.wparks.shared.data.ParkRepository
@@ -11,8 +11,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ParkViewModel(private val repository: ParkRepository) : ViewModel() {
+@HiltViewModel
+class ParkViewModel @Inject constructor(
+    private val repository: ParkRepository
+    ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ParkViewState())
     val uiState: StateFlow<ParkViewState> get() = _uiState

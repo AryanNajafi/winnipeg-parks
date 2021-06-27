@@ -3,6 +3,7 @@ package io.github.wparks.androidApp.ui.park
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,15 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import io.github.wparks.androidApp.MyApplication
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wparks.androidApp.ui.MyApp
 import io.github.wparks.androidApp.ui.home.HomeActivity
 
+@AndroidEntryPoint
 class ParkActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: ParkViewModel
-    private lateinit var viewModelFactory: ParkViewModelFactory
+    private val viewModel: ParkViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +42,6 @@ class ParkActivity : AppCompatActivity() {
             setHomeButtonEnabled(true)
             title = parkTitle
         }
-
-        val appContainer = (application as MyApplication).appContainer
-
-        viewModelFactory = ParkViewModelFactory(appContainer.repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ParkViewModel::class.java)
 
         viewModel.loadParkInfo(parkId)
     }

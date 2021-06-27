@@ -3,6 +3,7 @@ package io.github.wparks.androidApp.ui.home
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,16 +15,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModelProvider
-import io.github.wparks.androidApp.MyApplication
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wparks.androidApp.ui.MyApp
 import io.github.wparks.androidApp.ui.park.ParkActivity
 import io.github.wparks.shared.Park
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var viewModelFactory: HomeViewModelFactory
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +38,6 @@ class HomeActivity : AppCompatActivity() {
                 })
             }
         }
-        
-        val appContainer = (application as MyApplication).appContainer
-
-        viewModelFactory = HomeViewModelFactory(appContainer.repository)
-        viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(HomeViewModel::class.java)
 
         viewModel.loadParks()
     }

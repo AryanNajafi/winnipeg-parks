@@ -49,7 +49,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0")
                 implementation("io.ktor:ktor-client-core:1.5.3")
                 implementation("io.ktor:ktor-client-json:1.5.3")
@@ -67,8 +67,8 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
+                //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
                 implementation("io.ktor:ktor-client-json-jvm:1.5.3")
                 implementation("io.ktor:ktor-client-okhttp:1.4.3")
                 implementation("com.squareup.sqldelight:android-driver:1.4.4")
