@@ -4,11 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.wparks.shared.Park
+import io.github.wparks.shared.data.AssetType
 import io.github.wparks.shared.data.ParkRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,12 +25,15 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             parkRepository.tryUpdateParksCache()
+            val assetTypesFlow = parkRepository.loadAssetTypes()
             pageNumberFlow.collectLatest { pageNumber ->
-                parkRepository.loadParks(pageNumber)
-                    .collect { parks ->
-                        _uiState.value = HomeViewState(_uiState.value.parks + parks)
-                        currentPage++
-                    }
+                val parksFlow = parkRepository.loadParks(pageNumber)
+                combine(parksFlow, assetTypesFlow) { parks, assetTypes ->
+                    HomeViewState(_uiState.value.parks + parks, assetTypes)
+                }.collect {
+                    _uiState.value = it
+                    currentPage++
+                }
             }
         }
     }
@@ -48,6 +49,7 @@ class HomeViewModel @Inject constructor(
 
 data class HomeViewState(
     val parks: List<Park> = emptyList(),
+    val assetTypes: List<AssetType> = emptyList(),
     val loading: Boolean = false,
 )
 

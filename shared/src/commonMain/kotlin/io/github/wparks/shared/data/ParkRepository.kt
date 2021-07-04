@@ -41,6 +41,11 @@ class ParkRepository(private val api: ParkApi,
         return parkQueries.selectParks(PAGE_SIZE, page * PAGE_SIZE).asFlow().mapToList()
     }
 
+    fun loadAssetTypes(): Flow<List<AssetType>> {
+        return parkQueries.selectAssetTypes(mapper = { typeId, title ->
+            AssetType(typeId.toInt(), title) }).asFlow().mapToList()
+    }
+
     private suspend fun shouldUpdateParksCache(): Boolean {
         val parksCount = parkQueries.selectParksCount().executeAsOne()
         val cacheVersion = settings.getInt(SETTINGS_KEY_CACHE_VERSION, 0)

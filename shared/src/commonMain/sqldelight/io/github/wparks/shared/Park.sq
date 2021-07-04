@@ -22,11 +22,6 @@ CREATE TABLE asset (
     longitude REAL
 );
 
-CREATE TABLE assetType (
-    id INTEGER PRIMARY KEY,
-    title TEXT NOT NULL
-);
-
 selectParksCount:
 SELECT COUNT (*) FROM park;
 
@@ -38,10 +33,6 @@ insertAssetObject:
 INSERT OR REPLACE INTO asset(id, title, parkId, typeId, subtype, size, latitude, longitude)
 VALUES ?;
 
-insertAssetTypeObject:
-INSERT OR REPLACE INTO assetType(id, title)
-VALUES ?;
-
 selectParkById:
 SELECT * FROM park WHERE id = ?;
 
@@ -50,6 +41,9 @@ SELECT * FROM park LIMIT :limit OFFSET :offset;
 
 selectParkAssets:
 SELECT * FROM asset WHERE parkId = ?;
+
+selectAssetTypes:
+SELECT DISTINCT typeId, title FROM asset;
 
 
 
