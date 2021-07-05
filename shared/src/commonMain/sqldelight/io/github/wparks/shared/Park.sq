@@ -39,6 +39,13 @@ SELECT * FROM park WHERE id = ?;
 selectParks:
 SELECT * FROM park LIMIT :limit OFFSET :offset;
 
+selectFilteredParks:
+SELECT * FROM park
+WHERE id IN (
+    SELECT DISTINCT parkId FROM asset WHERE typeId IN ?
+)
+LIMIT :limit OFFSET :offset;
+
 selectParkAssets:
 SELECT * FROM asset WHERE parkId = ?;
 

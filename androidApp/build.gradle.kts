@@ -11,7 +11,7 @@ val lifecycleVersion = "2.2.0"
 
 dependencies {
     implementation(project(":shared"))
-    implementation("androidx.activity:activity-compose:1.3.0-beta02")
+    implementation("androidx.activity:activity-compose:1.3.0-rc01")
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
@@ -21,6 +21,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.13.0")
     implementation("com.google.dagger:hilt-android:2.37")
     kapt("com.google.dagger:hilt-android-compiler:2.37")
 }

@@ -2,5 +2,7 @@
     <string name="app_name">Winnipeg Parks</string>
     <string name="filter_action">Parks filter</string>
     <string name="filter_title">Filters</string>
+    <string name="filter_submit">Search</string>
+    <string name="filter_cancel">Cancel</string>
 
 </resources>

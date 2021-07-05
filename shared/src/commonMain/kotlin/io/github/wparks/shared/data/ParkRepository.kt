@@ -37,8 +37,10 @@ class ParkRepository(private val api: ParkApi,
         return parkQueries.selectParkAssets(parkId).asFlow().mapToList()
     }
 
-    fun loadParks(page: Long): Flow<List<Park>> {
-        return parkQueries.selectParks(PAGE_SIZE, page * PAGE_SIZE).asFlow().mapToList()
+    fun loadParks(page: Long, filters: List<Long> = emptyList()): Flow<List<Park>> {
+        return (if (filters.isEmpty()) parkQueries.selectParks(PAGE_SIZE, page * PAGE_SIZE)
+                else parkQueries.selectFilteredParks(filters, PAGE_SIZE, page * PAGE_SIZE))
+            .asFlow().mapToList()
     }
 
     fun loadAssetTypes(): Flow<List<AssetType>> {

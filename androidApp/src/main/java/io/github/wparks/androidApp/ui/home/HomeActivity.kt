@@ -6,9 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
@@ -16,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,9 +22,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowRow
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wparks.androidApp.R
+import io.github.wparks.androidApp.data.Filter
 import io.github.wparks.androidApp.ui.MyApp
+import io.github.wparks.androidApp.ui.components.FilterChip
 import io.github.wparks.androidApp.ui.park.ParkActivity
 import io.github.wparks.shared.Park
 import kotlinx.coroutines.launch
@@ -43,7 +45,7 @@ class HomeActivity : AppCompatActivity() {
             MyApp {
                 val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
                 val scope = rememberCoroutineScope()
-                val uiState = viewModel.uiState.collectAsState()
+                val filterUiState: FilterViewState by viewModel.filterUiState.collectAsState()
 
                 BackdropScaffold(
                     scaffoldState = scaffoldState,
@@ -80,10 +82,35 @@ class HomeActivity : AppCompatActivity() {
                         )
                              },
                     backLayerContent = {
-                        uiState.value.assetTypes.forEach {
-                            Text(text = it.title, color = Color.Black)
+                        val filters = filterUiState.assetTypes.map { Filter(it.id, it.title) }
+                        FlowRow(modifier = Modifier.padding(5.dp)) {
+                                filters.forEach { filter ->
+                                    FilterChip(filter = filter) {
+
+                                    }
+                                }
                         }
-                        Spacer(modifier = Modifier.height(200.dp))
+
+                        Row(modifier = Modifier.padding(10.dp)) {
+                            Button(modifier = Modifier.weight(1f), onClick = {
+                                if (filters.any { it.checked.value }) {
+                                    scope.launch { scaffoldState.conceal() }
+                                    viewModel.setFilters(filters
+                                        .filter { it.checked.value }
+                                        .map { it.id.toLong() })
+                                }
+                            }) {
+                                Text(text = stringResource(id = R.string.filter_submit))
+                            }
+
+                            Spacer(modifier = Modifier.width(15.dp))
+
+                            Button(modifier = Modifier.weight(1f), onClick = {
+                                scope.launch { scaffoldState.conceal() }
+                            }) {
+                                Text(text = stringResource(id = R.string.filter_cancel))
+                            }
+                        }
                     },
                     frontLayerContent = {
                         Parks(viewModel = viewModel, onItemClick = {
@@ -112,12 +139,12 @@ class HomeActivity : AppCompatActivity() {
 fun Parks(viewModel: HomeViewModel,
           onItemClick: (Park) -> Unit) {
 
-    val viewState = viewModel.uiState.collectAsState()
-    val lastIndex = viewState.value.parks.lastIndex
+    val viewState: HomeViewState by viewModel.uiState.collectAsState()
+    val lastIndex = viewState.parks.lastIndex
 
     Surface(Modifier.fillMaxSize()) {
         LazyColumn(Modifier.background(color = Color(0xFFF3F3F3))) {
-            itemsIndexed(viewState.value.parks) { index, park ->
+            itemsIndexed(viewState.parks) { index, park ->
                 if (index == lastIndex) {
                     viewModel.loadMoreParks()
                 }
