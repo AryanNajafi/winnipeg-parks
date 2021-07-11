@@ -4,6 +4,7 @@ plugins {
     id("kotlin-android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 val composeVersion = "1.0.0-beta09"
@@ -23,6 +24,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("com.google.accompanist:accompanist-flowlayout:0.13.0")
     implementation("com.google.dagger:hilt-android:2.37")
+    implementation("com.google.android.gms:play-services-maps:17.0.1")
+    implementation("com.google.maps.android:maps-ktx:2.3.0")
+
     kapt("com.google.dagger:hilt-android-compiler:2.37")
 }
 

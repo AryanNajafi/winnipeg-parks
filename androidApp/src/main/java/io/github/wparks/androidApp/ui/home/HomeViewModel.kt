@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(
                     _filterUiState.value = FilterViewState(assetTypes = assetTypes)
                 }
             }
-            
+
             parkParamsFlow.collectLatest { parkParams ->
                 parkRepository.loadParks(parkParams.page, parkParams.filterIds).collect { parks ->
                     _uiState.value = HomeViewState(_uiState.value.parks + parks)

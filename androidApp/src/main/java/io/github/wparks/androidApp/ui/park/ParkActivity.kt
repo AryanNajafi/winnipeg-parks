@@ -12,13 +12,20 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.maps.android.ktx.addMarker
+import com.google.maps.android.ktx.awaitMap
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wparks.androidApp.ui.MyApp
 import io.github.wparks.androidApp.ui.home.HomeActivity
+import io.github.wparks.shared.Asset
 
 @AndroidEntryPoint
 class ParkActivity : AppCompatActivity() {
@@ -58,8 +65,7 @@ class ParkActivity : AppCompatActivity() {
 
 @Composable
 fun ParkInfo(viewModel: ParkViewModel) {
-
-    val viewState = viewModel.uiState.collectAsState()
+    val viewState: ParkViewState by viewModel.uiState.collectAsState()
 
     val typography = MaterialTheme.typography
     
@@ -67,12 +73,19 @@ fun ParkInfo(viewModel: ParkViewModel) {
         .fillMaxSize()
         .background(color = MaterialTheme.colors.surface)
     ) {
-        Column(Modifier.padding(10.dp) ) {
-            Text(text = "Amenities", style = typography.h6)
+        Column {
+            Box(modifier = Modifier.height(200.dp)) {
+                if (viewState.park != null) {
+                    ParkMapView(viewState.assets)
+                }
+            }
+
             Spacer(modifier = Modifier.requiredHeight(10.dp))
-            LazyColumn {
+            Text(modifier = Modifier.padding(horizontal = 10.dp),
+                text = "Amenities", style = typography.h6)
+            LazyColumn(modifier = Modifier.padding(10.dp)) {
                 itemsIndexed(
-                    viewState.value.assets.distinctBy {
+                    viewState.assets.distinctBy {
                         AssetSelector(it.typeId, it.subtype, it.size)
                     }
                 ) { index, asset ->
@@ -83,6 +96,44 @@ fun ParkInfo(viewModel: ParkViewModel) {
 
     }
 
+}
+
+@Composable
+private fun ParkMapView(assets: List<Asset>) {
+    val mapView = rememberMapViewWithLifecycle()
+    MapViewContainer(mapView, assets = assets)
+}
+
+@Composable
+private fun MapViewContainer(
+    map: MapView,
+    assets: List<Asset>
+) {
+    var mapInitialized by remember(map) { mutableStateOf(false) }
+    LaunchedEffect(map, mapInitialized) {
+        if (!mapInitialized) {
+            val googleMap = map.awaitMap()
+            val latLngBoundsBuilder = LatLngBounds.Builder()
+            assets
+                .forEach { asset ->
+                    val position = LatLng(asset.latitude!!, asset.longitude!!)
+                    googleMap.addMarker {
+                        position(position)
+                        title(asset.title)
+                        snippet(asset.subtype)
+                    }
+                    latLngBoundsBuilder.include(position)
+                }
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(
+                latLngBoundsBuilder.build(), 20))
+            mapInitialized = true
+        }
+    }
+
+    AndroidView({ map }) { mapView ->
+
+    }
 }
 
 data class AssetSelector(val typeId: Long, val subType: String?, val size: String?)
