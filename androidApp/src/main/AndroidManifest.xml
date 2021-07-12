@@ -12,8 +12,7 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="io.github.wparks.androidApp.ui.home.HomeActivity"
-            android:theme="@style/AppTheme.NoToolbar">
+        <activity android:name="io.github.wparks.androidApp.ui.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
