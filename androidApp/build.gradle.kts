@@ -7,7 +7,7 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
-val composeVersion = "1.0.0-beta09"
+val composeVersion = "1.0.0-rc01"
 val lifecycleVersion = "2.2.0"
 
 dependencies {
