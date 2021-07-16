@@ -11,8 +11,8 @@ public data class Asset(
   public val parkId: Long,
   public val subtype: String?,
   public val size: String?,
-  public val latitude: Double?,
-  public val longitude: Double?
+  public val latitude: Double,
+  public val longitude: Double
 ) {
   public override fun toString(): String = """
   |Asset [

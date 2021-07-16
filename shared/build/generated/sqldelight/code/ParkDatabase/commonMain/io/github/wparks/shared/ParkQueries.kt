@@ -21,8 +21,8 @@ public interface ParkQueries : Transacter {
     area: Double?,
     water: Double?,
     land: Double?,
-    latitude: Double?,
-    longitude: Double?
+    latitude: Double,
+    longitude: Double
   ) -> T): Query<T>
 
   public fun selectParkById(id: Long): Query<Park>
@@ -39,8 +39,8 @@ public interface ParkQueries : Transacter {
       area: Double?,
       water: Double?,
       land: Double?,
-      latitude: Double?,
-      longitude: Double?
+      latitude: Double,
+      longitude: Double
     ) -> T
   ): Query<T>
 
@@ -59,8 +59,8 @@ public interface ParkQueries : Transacter {
       area: Double?,
       water: Double?,
       land: Double?,
-      latitude: Double?,
-      longitude: Double?
+      latitude: Double,
+      longitude: Double
     ) -> T
   ): Query<T>
 
@@ -77,8 +77,8 @@ public interface ParkQueries : Transacter {
     parkId: Long,
     subtype: String?,
     size: String?,
-    latitude: Double?,
-    longitude: Double?
+    latitude: Double,
+    longitude: Double
   ) -> T): Query<T>
 
   public fun selectParkAssets(parkId: Long): Query<Asset>

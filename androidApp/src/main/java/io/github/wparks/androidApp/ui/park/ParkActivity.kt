@@ -97,7 +97,7 @@ fun ParkInfo(viewModel: ParkViewModel, onBackPressed: () -> Unit) {
         Column {
             Box(modifier = Modifier.height(300.dp)) {
                 viewState.park?.let { park ->
-                    ParkMapView(viewState.assets, LatLng(park.latitude!!, park.longitude!!))
+                    ParkMapView(viewState.assets, LatLng(park.latitude, park.longitude))
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -157,7 +157,7 @@ private fun MapViewContainer(
                 val latLngBoundsBuilder = LatLngBounds.Builder()
                 assets
                     .forEach { asset ->
-                        val position = LatLng(asset.latitude!!, asset.longitude!!)
+                        val position = LatLng(asset.latitude, asset.longitude)
                         googleMap.addMarker {
                             position(position)
                             title(asset.title)

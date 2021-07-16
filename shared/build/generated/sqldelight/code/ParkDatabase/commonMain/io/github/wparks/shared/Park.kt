@@ -13,8 +13,8 @@ public data class Park(
   public val area: Double?,
   public val water: Double?,
   public val land: Double?,
-  public val latitude: Double?,
-  public val longitude: Double?
+  public val latitude: Double,
+  public val longitude: Double
 ) {
   public override fun toString(): String = """
   |Park [
