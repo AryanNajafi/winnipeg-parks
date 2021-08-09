@@ -9,6 +9,7 @@ plugins {
 
 val composeVersion = "1.0.1"
 val lifecycleVersion = "2.2.0"
+val accompanistVersion = "0.16.0"
 
 dependencies {
     implementation(project(":shared"))
@@ -22,10 +23,11 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
-    implementation("com.google.accompanist:accompanist-flowlayout:0.13.0")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.13.0")
-    implementation("com.google.accompanist:accompanist-insets:0.13.0")
-    implementation("com.google.accompanist:accompanist-insets-ui:0.13.0")
+    implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-insets-ui:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
     implementation("com.google.dagger:hilt-android:2.37")
     implementation("com.google.android.gms:play-services-maps:17.0.1")
     implementation("com.google.maps.android:maps-ktx:2.3.0")

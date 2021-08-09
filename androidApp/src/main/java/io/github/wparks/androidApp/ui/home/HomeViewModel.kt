@@ -30,6 +30,8 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            _uiState.value = HomeViewState(loading = true)
+
             parkRepository.tryUpdateParksCache()
 
             launch {

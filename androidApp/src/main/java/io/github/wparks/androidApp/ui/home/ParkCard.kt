@@ -16,9 +16,10 @@ import androidx.compose.ui.unit.dp
 import io.github.wparks.shared.Park
 
 @Composable
-fun ParkCard(park: Park,
-             onItemClick: (Park) -> Unit,
-             modifier: Modifier = Modifier) {
+fun ParkCard(
+    park: Park,
+    onItemClick: (Park) -> Unit,
+    modifier: Modifier = Modifier,) {
     Card(modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)

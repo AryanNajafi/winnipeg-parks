@@ -7,9 +7,11 @@ import io.github.wparks.shared.data.remote.ParkApi
 import io.ktor.client.*
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 
-class AppContainer(dbContainer: DbContainer) {
+class AppContainer(dbContainer: DbContainer, dispatcher: CoroutineDispatcher) {
 
     private val httpClient = HttpClient {
         install(JsonFeature) {
@@ -23,5 +25,5 @@ class AppContainer(dbContainer: DbContainer) {
 
     private val settings = Settings()
 
-    val repository = ParkRepository(parkApi, dbContainer.database.parkQueries, settings)
+    val repository = ParkRepository(parkApi, dbContainer.database.parkQueries, settings, dispatcher)
 }

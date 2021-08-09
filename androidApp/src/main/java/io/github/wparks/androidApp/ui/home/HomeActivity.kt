@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FilterList
@@ -17,12 +18,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wparks.androidApp.R
 import io.github.wparks.androidApp.data.Filter
@@ -144,12 +149,46 @@ fun Parks(viewModel: HomeViewModel,
 
     Surface(Modifier.fillMaxSize()) {
         LazyColumn(Modifier.background(color = Color(0xFFF3F3F3))) {
-            itemsIndexed(viewState.parks) { index, park ->
-                if (index == lastIndex) {
-                    viewModel.loadMoreParks()
+            if (viewState.loading.not()) {
+                itemsIndexed(viewState.parks) { index, park ->
+                    if (index == lastIndex) {
+                        viewModel.loadMoreParks()
+                    }
+                    ParkCard(park = park, onItemClick = onItemClick)
                 }
-                ParkCard(park = park, onItemClick = onItemClick)
+            } else {
+                items(10) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colors.surface)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp, 10.dp)) {
+                            Text(
+                                text = "Lorem ipsum dolor sit amet",
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.placeholder(
+                                    visible = viewState.loading,
+                                    highlight = PlaceholderHighlight.shimmer()
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(
+                                text = "Lorem ipsum dolor sit",
+                                style = MaterialTheme.typography.body2,
+                                modifier = Modifier.placeholder(
+                                    visible = viewState.loading,
+                                    highlight = PlaceholderHighlight.shimmer()
+                                )
+                            )
+                        }
+                    }
+                }
             }
+
+
         }
     }
 

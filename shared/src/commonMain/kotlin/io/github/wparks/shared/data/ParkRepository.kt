@@ -7,11 +7,15 @@ import io.github.wparks.shared.Asset
 import io.github.wparks.shared.Park
 import io.github.wparks.shared.ParkQueries
 import io.github.wparks.shared.data.remote.ParkApi
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
 class ParkRepository(private val api: ParkApi,
                      private val parkQueries: ParkQueries,
-                     private val settings: Settings) {
+                     private val settings: Settings,
+                     private val dispatcher: CoroutineDispatcher = Dispatchers.Default) {
 
     private suspend fun fetchParksInfo() {
         val parksInfo = api.fetchParksInfo()
@@ -59,7 +63,9 @@ class ParkRepository(private val api: ParkApi,
     }
 
     suspend fun tryUpdateParksCache() {
-        if (shouldUpdateParksCache()) fetchParksInfo()
+        withContext(dispatcher) {
+            if (shouldUpdateParksCache()) fetchParksInfo()
+        }
     }
 
     companion object {

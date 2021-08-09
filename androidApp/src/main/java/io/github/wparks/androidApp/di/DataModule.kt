@@ -10,6 +10,7 @@ import io.github.wparks.shared.AppContainer
 import io.github.wparks.shared.data.ParkRepository
 import io.github.wparks.shared.data.db.DbContainer
 import io.github.wparks.shared.data.db.DriverFactory
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -25,7 +26,7 @@ class DataModule {
     @Provides
     @Singleton
     fun provideAppContainer(dbContainer: DbContainer): AppContainer {
-        return AppContainer(dbContainer)
+        return AppContainer(dbContainer, Dispatchers.IO)
     }
 
     @Provides
